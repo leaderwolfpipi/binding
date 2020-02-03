@@ -15,7 +15,7 @@ func (f FormBind) Name() string {
 }
 
 // 实现bind接口
-func (f FormBind) Bind(r http.Request, obj interface{}) error {
+func (f FormBind) Bind(r *http.Request, obj interface{}) error {
 	// 绑定form表单参数
 	r.ParseForm()
 	// 解析出url.Values
