@@ -100,7 +100,7 @@ func mapping(values url.Values, val reflect.Value, bType string) error {
 			vRule := fieldT.Tag.Get("validate")
 
 			// 参数校验
-			vd := new(validate.Validater)
+			vd := new(validator.Validater)
 			ok, err := vd.Validate(data, vRule)
 			if !ok {
 				if err != nil {
