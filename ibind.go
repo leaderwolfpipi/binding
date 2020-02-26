@@ -123,6 +123,9 @@ func mapping(values url.Values, val reflect.Value, bType string) error {
 			}
 		}
 		// 返回汇总错误
+		if errsMsg == "" {
+			return nil
+		}
 		return errors.New(errsMsg)
 	} else if bType == "json" {
 		// json映射
