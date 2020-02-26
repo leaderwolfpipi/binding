@@ -10,6 +10,8 @@ import (
 	"reflect"
 	"strconv"
 
+	// 使用github.com/go-playground/validator/v10
+	// "github.com/go-playground/validator/v10"
 	"github.com/leaderwolfpipi/validator"
 )
 
@@ -61,6 +63,8 @@ var (
 
 // 公共映射方法
 func mapping(values url.Values, val reflect.Value, bType string) error {
+	// 汇总错误
+	var errsMsg string
 	// 根据不同类型执行映射
 	if bType == "query" || bType == "form" { // url/form 映射
 		typ := val.Type() // 获取对象类型
@@ -91,6 +95,9 @@ func mapping(values url.Values, val reflect.Value, bType string) error {
 			param := fieldT.Tag.Get("param")
 			if param == "" {
 				return errors.New("参数不能为空")
+			} else if param == "-" {
+				// 忽略该字段
+				continue
 			}
 
 			// 获取url参数
@@ -112,9 +119,11 @@ func mapping(values url.Values, val reflect.Value, bType string) error {
 			// 设置结构体
 			err = setValue(data, val.Field(i))
 			if err != nil {
-				return err
+				errsMsg += err.Error() + "|"
 			}
 		}
+		// 返回汇总错误
+		return errors.New(errsMsg)
 	} else if bType == "json" {
 		// json映射
 
